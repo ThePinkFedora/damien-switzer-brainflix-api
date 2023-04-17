@@ -10,6 +10,7 @@ function Video(title, channel, image, description) {
   this.id = v4();
   this.title = title;
   this.channel = channel;
+  this.description = description;
   this.image = image;
   this.views = "0";
   this.likes = "0";
