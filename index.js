@@ -6,8 +6,8 @@ const readVideosData = () => JSON.parse(fs.readFileSync("./data/videos.json"));
 const writeVideosData = (data) => fs.writeFileSync("./data/videos.json", data);
 
 app.get("/", (req, res) => {
-  const file = fs.readFileSync("./index.html");
-  res.send(file);
+  const indexFile = fs.readFileSync("./index.html", "utf8");
+  res.send(indexFile);
 });
 
 app.get("/videos", (req, res) => {
