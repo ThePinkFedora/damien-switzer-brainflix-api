@@ -27,9 +27,9 @@ router
     //Construct a new comment object from the request data
     const newComment = new Comment(name, comment);
     //Get the video list
-    const videos = readVideosData();
+    const videoList = readVideosData();
     //Get the target video and push the comment to it's list
-    const video = videos.find((vid) => vid.id === videoId);
+    const video = videoList.find((vid) => vid.id === videoId);
     if (!video) {
       res.sendStatus(500);
       return;
@@ -37,7 +37,7 @@ router
     //Push the new comment
     video.comments.push(newComment);
     //Write back the video list
-    writeVideosData(videos);
+    writeVideosData(videoList);
     //Return the new comment
     res.json(newComment);
   })
@@ -46,9 +46,9 @@ router
     const { id: commentId } = req.body;
 
     //Get the video list
-    const videos = readVideosData();
+    const videoList = readVideosData();
     //Get the target video and push the comment to it's list
-    const video = videos.find((vid) => vid.id === videoId);
+    const video = videoList.find((vid) => vid.id === videoId);
     if (!video) {
       res.sendStatus(500);
       return;
@@ -59,7 +59,7 @@ router
       1
     )[0];
     //Write back the video list
-    writeVideosData(videos);
+    writeVideosData(videoList);
     //Return the new comment
     res.json(removedComment);
   });
