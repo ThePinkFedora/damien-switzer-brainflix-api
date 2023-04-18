@@ -48,7 +48,7 @@ router
     writeVideosData(videos);
 
     res.status(201);
-    res.send({ id: newVideo.id });
+    res.send(newVideo);
   });
 
 router.get("/:videoId", (req, res) => {

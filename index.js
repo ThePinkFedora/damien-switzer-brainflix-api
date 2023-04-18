@@ -1,8 +1,11 @@
+require("dotenv").config();
 const fs = require("node:fs");
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const videosRoutes = require("./routes/videos");
+
+const { PORT } = process.env;
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} | ${new Date().toLocaleTimeString()}`);
@@ -20,4 +23,4 @@ app.get("/", (req, res) => {
   res.send(indexFile);
 });
 
-app.listen(80, () => console.log("Server is running | " + new Date()));
+app.listen(PORT, () => console.log("Server is running | " + new Date()));
