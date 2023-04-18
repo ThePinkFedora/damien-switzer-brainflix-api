@@ -66,10 +66,12 @@ router.get("/:videoId", (req, res) => {
   res.json(video);
 });
 
-router.route("/:videoId", (req, res) => {
+router.put("/:videoId/likes", (req, res) => {
   const { videoId } = req.params;
   const videos = readVideosData();
   const video = videos.find((video) => video.id === videoId);
+  video.likes = (parseInt(video.likes.replaceAll(",", "")) + 1).toLocaleString("en-us");
+  writeVideosData(videos);
   res.json(video);
 });
 
