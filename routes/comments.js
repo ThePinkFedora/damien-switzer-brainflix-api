@@ -18,50 +18,48 @@ function Comment(name, comment) {
   this.timestamp = new Date().getTime();
 }
 
-router
-  .route("/")
-  //Adds a new comment to the specified videdo
-  .post((req, res) => {
-    const videoId = req.videoId;
-    const { name, comment } = req.body;
-    //Construct a new comment object from the request data
-    const newComment = new Comment(name, comment);
-    //Get the video list
-    const videoList = readVideosData();
-    //Get the target video and push the comment to it's list
-    const video = videoList.find((vid) => vid.id === videoId);
-    if (!video) {
-      res.sendStatus(500);
-      return;
-    }
-    //Push the new comment
-    video.comments.push(newComment);
-    //Write back the video list
-    writeVideosData(videoList);
-    //Return the new comment
-    res.json(newComment);
-  })
-  .delete((req, res) => {
-    const videoId = req.videoId;
-    const { id: commentId } = req.body;
+router.post("/", (req, res) => {
+  const videoId = req.videoId;
+  const { name, comment } = req.body;
+  //Construct a new comment object from the request data
+  const newComment = new Comment(name, comment);
+  //Get the video list
+  const videoList = readVideosData();
+  //Get the target video and push the comment to it's list
+  const video = videoList.find((vid) => vid.id === videoId);
+  if (!video) {
+    res.sendStatus(500);
+    return;
+  }
+  //Push the new comment
+  video.comments.push(newComment);
+  //Write back the video list
+  writeVideosData(videoList);
+  //Return the new comment
+  res.json(newComment);
+});
 
-    //Get the video list
-    const videoList = readVideosData();
-    //Get the target video and push the comment to it's list
-    const video = videoList.find((vid) => vid.id === videoId);
-    if (!video) {
-      res.sendStatus(500);
-      return;
-    }
-    ///Remove the comment from the list by splicing it out
-    const removedComment = video.comments.splice(
-      video.comments.findIndex((comment) => comment.id !== commentId),
-      1
-    )[0];
-    //Write back the video list
-    writeVideosData(videoList);
-    //Return the new comment
-    res.json(removedComment);
-  });
+router.delete("/:commentId", (req, res) => {
+  const videoId = req.videoId;
+  const { commentId } = req.params;
+
+  //Get the video list
+  const videoList = readVideosData();
+  //Get the target video and push the comment to it's list
+  const video = videoList.find((vid) => vid.id === videoId);
+  if (!video) {
+    res.sendStatus(500);
+    return;
+  }
+  ///Remove the comment from the list by splicing it out
+  const removedComment = video.comments.splice(
+    video.comments.findIndex((comment) => comment.id === commentId),
+    1
+  )[0];
+  //Write back the video list
+  writeVideosData(videoList);
+  //Return the new comment
+  res.json(removedComment);
+});
 
 module.exports = router;
