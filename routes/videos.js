@@ -3,9 +3,17 @@ const express = require("express");
 const router = express.Router();
 const { v4 } = require("uuid");
 
+const commentsRoute = require("./comments");
+
 const readVideosData = () => JSON.parse(fs.readFileSync("./data/videos.json"));
 const writeVideosData = (data) => fs.writeFileSync("./data/videos.json", JSON.stringify(data));
 
+/**
+ * @param {string} title
+ * @param {string} channel
+ * @param {string} image
+ * @param {string} description
+ */
 function Video(title, channel, image, description) {
   this.id = v4();
   this.title = title;
@@ -57,5 +65,21 @@ router.get("/:videoId", (req, res) => {
   const video = videos.find((video) => video.id === videoId);
   res.json(video);
 });
+
+router.route("/:videoId", (req, res) => {
+  const { videoId } = req.params;
+  const videos = readVideosData();
+  const video = videos.find((video) => video.id === videoId);
+  res.json(video);
+});
+
+router.use(
+  "/:videoId/comments",
+  (req, res, next) => {
+    req.videoId = req.params.videoId;
+    next();
+  },
+  commentsRoute
+);
 
 module.exports = router;
