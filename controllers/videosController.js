@@ -1,6 +1,4 @@
 const fs = require("node:fs");
-const express = require("express");
-const router = express.Router();
 const { v4 } = require("uuid");
 
 const readVideosData = () => JSON.parse(fs.readFileSync("./data/videos.json"));

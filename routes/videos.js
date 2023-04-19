@@ -1,8 +1,5 @@
-const fs = require("node:fs");
 const express = require("express");
 const router = express.Router();
-const { v4 } = require("uuid");
-
 const { get, post, getVideo, putVideoLike } = require("../controllers/videosController");
 const commentsRoute = require("./comments");
 
