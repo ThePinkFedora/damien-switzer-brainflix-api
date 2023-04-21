@@ -36,7 +36,8 @@ function get(req, res) {
 
 function post(req, res) {
   const videos = readVideosData();
-  const { title, channel, image, description } = req.body;
+  let { title, channel, thumbnailUrl, description } = req.body;
+  const { thumbnail } = { ...req.files };
 
   if (!title || !description) {
     res.status(400);
@@ -44,9 +45,17 @@ function post(req, res) {
       error: "POST body must contain all requiredProperties",
       requiredProperties: ["title", "description"],
     });
+    return;
   }
 
-  const newVideo = new Video(title, channel ?? "BrainFlix User", image ?? "", description);
+  if (thumbnail) {
+    const fileExt = /.[^.]+$/.exec(thumbnail.name);
+    thumbnail.name = v4() + fileExt;
+    thumbnail.mv("./public/images/" + thumbnail.name);
+    thumbnailUrl = `http://localhost:${process.env.PORT}/images/` + thumbnail.name;
+  }
+
+  const newVideo = new Video(title, channel ?? "BrainFlix User", thumbnailUrl, description);
   videos.push(newVideo);
   writeVideosData(videos);
 

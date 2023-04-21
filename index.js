@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 const videosRoutes = require("./routes/videos");
 
 const { PORT } = process.env;
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 app.use(express.static("public"));
 
 app.use("/videos", videosRoutes);
