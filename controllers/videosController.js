@@ -48,6 +48,7 @@ function post(req, res) {
     return;
   }
 
+  //If a thumbnail was provided, save the file and set the correct URL
   if (thumbnail) {
     const fileExt = /.[^.]+$/.exec(thumbnail.name);
     thumbnail.name = v4() + fileExt;
@@ -65,18 +66,36 @@ function post(req, res) {
 
 function getVideo(req, res) {
   const { videoId } = req.params;
-  const videos = readVideosData();
-  const video = videos.find((video) => video.id === videoId);
-  res.json(video);
+  const video = readVideosData().find((video) => video.id === videoId);
+
+  //If the video was not found send a 404
+  if (!video) {
+    res.status(404);
+    res.json({
+      message: "No video with that id exists",
+    });
+  } else {
+    res.json(video);
+  }
 }
 
 function putVideoLike(req, res) {
   const { videoId } = req.params;
   const videos = readVideosData();
   const video = videos.find((video) => video.id === videoId);
-  video.likes = (parseInt(video.likes.replaceAll(",", "")) + 1).toLocaleString("en-us");
-  writeVideosData(videos);
-  res.json(video);
+
+  //If the video was not found send a 404
+  if (!video) {
+    res.status(404);
+    res.json({
+      message: "No video with that id exists",
+    });
+  } else {
+    video.likes = (parseInt(video.likes.replaceAll(",", "")) + 1).toLocaleString("en-us"); //Increment likes
+    writeVideosData(videos);
+    res.status(201);
+    res.json(video);
+  }
 }
 
 module.exports = { get, post, getVideo, putVideoLike, read: readVideosData, write: writeVideosData };
