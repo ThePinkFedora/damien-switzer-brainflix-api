@@ -1,5 +1,5 @@
 const { v4 } = require("uuid");
-const { read: readVideos, write: writeVideos } = require("./videosController");
+const { write: writeVideos } = require("./videosController");
 
 /**
  * @param {string} name

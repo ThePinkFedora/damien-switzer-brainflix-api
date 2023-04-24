@@ -1,28 +1,26 @@
 require("dotenv").config();
-const fs = require("node:fs");
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const videosRoutes = require("./routes/videos");
 
-const { PORT } = process.env;
+const { PORT, CORS_ORIGIN } = process.env || 8080;
 
-app.use((req, res, next) => {
+//Log requests
+app.use((req, _res, next) => {
   console.log(`${req.method} ${req.path} | ${new Date().toLocaleTimeString()}`);
   next();
 });
 
-app.use(cors());
+app.use(cors({ origin: CORS_ORIGIN }));
+
 app.use(express.json());
+
 app.use(fileUpload());
+
 app.use(express.static("public"));
 
 app.use("/videos", videosRoutes);
 
-app.get("/", (req, res) => {
-  const indexFile = fs.readFileSync("./index.html", "utf8");
-  res.send(indexFile);
-});
-
-app.listen(PORT, () => console.log("Server is running | " + new Date()));
+app.listen(PORT, () => console.log("Server is running | " + new Date().toLocaleString()));

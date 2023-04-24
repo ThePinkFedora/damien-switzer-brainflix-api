@@ -26,6 +26,7 @@ function Video(title, channel, image, description) {
  * @returns {Video[]}
  */
 const readVideosData = () => JSON.parse(fs.readFileSync("./data/videos.json"));
+
 /**
  * Writes the list of videos to the model.
  * @param {Video[]} data - The videos list.
@@ -100,7 +101,7 @@ function putVideoLike(req, res) {
 }
 
 /**
- * Middleware for reading videos list and setting it up in route data
+ * Middleware for reading videos list and setting it up in route data.
  * @type {import("express").RequestHandler}
  */
 function preprocess(req, res, next) {
@@ -113,7 +114,7 @@ function preprocess(req, res, next) {
 }
 
 /**
- * Middleware for validating videoId and adding video to route data
+ * Middleware for validating videoId and adding video to route data.
  * @type {import("express").RequestHandler}
  */
 function preprocessVideoId(req, res, next) {
