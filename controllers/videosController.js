@@ -69,7 +69,7 @@ function post(req, res) {
     const fileExt = /.[^.]+$/.exec(thumbnail.name);
     thumbnail.name = v4() + fileExt;
     thumbnail.mv("./public/images/" + thumbnail.name);
-    thumbnailUrl = `http://localhost:${process.env.PORT}/images/` + thumbnail.name;
+    thumbnailUrl = `/images/` + thumbnail.name;
   }
 
   const newVideo = new Video(title, channel ?? "BrainFlix User", thumbnailUrl, description);
